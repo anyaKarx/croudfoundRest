@@ -1,0 +1,12 @@
+server:
+  port: 8080
+spring:
+  liquibase:
+    change-log: classpath:/db/liquibase/master.xml
+    enabled: true
+  datasource:
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+

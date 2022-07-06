@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+
+    <changeSet id="171616361377-1" author="Anya">
+        <createTable tableName="user">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="user_id_pk" nullable="false" unique="true" uniqueConstraintName="user_id"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="171616361377-2" author="Anya">
+        <createTable tableName="project">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="зкщоусе_id_pk" nullable="false" unique="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dateStart" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="dateFinish" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="required amount" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+            <column name="collected amount" type="numeric">
+                <constraints nullable="true"/>
+            </column>
+            <column name="parent" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="project" baseColumnNames="parent"
+                                 constraintName="fk_project_parent_user"
+                                 referencedTableName="user" referencedColumnNames="id"
+                                 onDelete ="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="171616361377-3" author="Anya">
+        <createTable tableName="payment">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="зфньуте_id_pk" nullable="false" unique="true"/>
+            </column>
+            <column name="price" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_user" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_project" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="payment" baseColumnNames="id_user"
+                                 constraintName="fk_user_payment"
+                                 referencedTableName="user" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="payment" baseColumnNames="id_project"
+                                 constraintName="fk_project_payment"
+                                 referencedTableName="project" referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
