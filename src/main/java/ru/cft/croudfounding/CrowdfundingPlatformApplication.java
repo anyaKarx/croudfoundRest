@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CroudfoundingApplication {
+public class CrowdfundingPlatformApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CroudfoundingApplication.class, args);
+		SpringApplication.run(CrowdfundingPlatformApplication.class, args);
 	}
 
 }
