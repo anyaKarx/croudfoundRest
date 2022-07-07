@@ -19,10 +19,5 @@ public class Config {
                 .paths(PathSelectors.any())
                 .build();
     }
-
-    @Bean
-    public PasswordEncoder encoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }
 }
 

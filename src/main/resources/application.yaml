@@ -10,3 +10,5 @@ spring:
     password: ${POSTGRES_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
 
+passwordEncoder:
+  strength: 13
