@@ -40,6 +40,9 @@
             <column name="parent" type="bigint">
                 <constraints nullable="false"/>
             </column>
+            <column name="description" type="varchar(3000)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <addForeignKeyConstraint baseTableName="project" baseColumnNames="parent"
