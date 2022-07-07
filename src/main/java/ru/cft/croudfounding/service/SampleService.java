@@ -3,7 +3,7 @@ package ru.cft.croudfounding.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.cft.croudfounding.repository.UserRepository;
-import ru.cft.croudfounding.repository.model.UserEntity;
+import ru.cft.croudfounding.repository.model.User;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public class SampleService {
 
     private final UserRepository sampleRepository;
 
-    public List<UserEntity> getAllSample() {
+    public List<User> getAllSample() {
         return sampleRepository.findAll();
     }
 }

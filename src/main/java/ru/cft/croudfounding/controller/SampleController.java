@@ -5,13 +5,11 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.cft.croudfounding.model.ErrorDTO;
-import ru.cft.croudfounding.model.ResponseDTO;
-import ru.cft.croudfounding.repository.model.UserEntity;
+import ru.cft.croudfounding.repository.model.User;
 import ru.cft.croudfounding.service.SampleService;
 
 import java.util.List;
@@ -30,7 +28,7 @@ public class SampleController {
                             content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
             })
     @GetMapping("/get/all")
-    public List<UserEntity> getAll() {
+    public List<User> getAll() {
         return sampleService.getAllSample();
     }
 

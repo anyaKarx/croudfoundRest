@@ -52,14 +52,11 @@
     </changeSet>
 
     <changeSet id="171616361377-3" author="Anya">
-        <createTable tableName="payment">
+        <createTable tableName="donation">
             <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="зфньуте_id_pk" nullable="false" unique="true"/>
+                <constraints primaryKey="true" primaryKeyName="donation_id_pk" nullable="false" unique="true"/>
             </column>
             <column name="price" type="numeric">
-                <constraints nullable="false"/>
-            </column>
-            <column name="date" type="datetime">
                 <constraints nullable="false"/>
             </column>
             <column name="id_user" type="bigint">
@@ -70,11 +67,11 @@
             </column>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="payment" baseColumnNames="id_user"
-                                 constraintName="fk_user_payment"
+        <addForeignKeyConstraint baseTableName="donation" baseColumnNames="id_user"
+                                 constraintName="fk_user_donation"
                                  referencedTableName="user" referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="payment" baseColumnNames="id_project"
-                                 constraintName="fk_project_payment"
+        <addForeignKeyConstraint baseTableName="donation" baseColumnNames="id_project"
+                                 constraintName="fk_project_donation"
                                  referencedTableName="project" referencedColumnNames="id"/>
     </changeSet>
 
