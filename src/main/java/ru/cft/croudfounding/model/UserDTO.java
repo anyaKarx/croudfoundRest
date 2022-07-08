@@ -17,6 +17,12 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO  {
+
+    @JsonProperty("id")
+    @Schema(example = "456", required = true, description = "уникальный идентификатор," +
+            " ставится на стороне бэка")
+    private long id;
+
     @JsonProperty("name")
     @Schema(example = "Петров Петр Петрович", required = true, description = "Фио пользователя")
     @NotNull

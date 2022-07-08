@@ -11,6 +11,9 @@
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="password" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
