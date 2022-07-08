@@ -5,17 +5,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.cft.croudfounding.model.ErrorDTO;
-import ru.cft.croudfounding.model.ProjectUnitDTO;
 import ru.cft.croudfounding.model.UserDTO;
 import ru.cft.croudfounding.service.UserService;
 
 import javax.validation.Valid;
-import java.security.Principal;
 
 @RestController
 @RequestMapping("users")
@@ -34,7 +30,7 @@ public class UserController {
                             content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
             })
     @GetMapping("/users/{email}")
-    public UserDTO get( @PathVariable String email) {
+    public UserDTO get(@PathVariable String email) {
         return userService.findUserByEmail(email);
     }
 

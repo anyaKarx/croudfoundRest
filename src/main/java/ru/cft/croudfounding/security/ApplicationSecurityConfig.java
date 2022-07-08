@@ -1,6 +1,5 @@
-package ru.cft.croudfounding.config;
+package ru.cft.croudfounding.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,7 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.cft.croudfounding.auth.ApplicationUserService;
-import ru.cft.croudfounding.security.RestAuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
@@ -25,7 +23,6 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
-    @Autowired
     public ApplicationSecurityConfig(PasswordEncoder passwordEncoder,
                                      ApplicationUserService applicationUserService,
                                      RestAuthenticationEntryPoint restAuthenticationEntryPoint) {
@@ -47,9 +44,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .mvcMatchers(HttpMethod.POST, "/projects/new").authenticated()
+                .mvcMatchers(HttpMethod.POST, "/projects/*/donate").authenticated()
+                .mvcMatchers(HttpMethod.PUT, "/users/*/edit").authenticated()
                 .anyRequest().permitAll();
-                // POST /projects/{projectName}/donate - auth required
-                // PUT /users/{email}/edit - auth required
     }
 
     @Override

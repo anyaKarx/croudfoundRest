@@ -1,6 +1,5 @@
 package ru.cft.croudfounding.auth;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,8 +12,7 @@ public class ApplicationUserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    @Autowired
-    public ApplicationUserService( UserRepository userRepository) {
+    public ApplicationUserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -22,7 +20,7 @@ public class ApplicationUserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findUserByEmail(email).orElseThrow(() ->
                         new UsernameNotFoundException(
-                                String.format("Username \"%s\" not found", email)));
+                                String.format("User with email \"%s\" not found", email)));
         return ApplicationUser.fromUser(user);
     }
 }
