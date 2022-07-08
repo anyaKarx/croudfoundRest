@@ -2,8 +2,9 @@ package ru.cft.croudfounding.auth;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.cft.croudfounding.repository.model.User;
 
-import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 public class ApplicationUser implements UserDetails {
@@ -17,6 +18,11 @@ public class ApplicationUser implements UserDetails {
         this.username = username;
         this.password = password;
         this.grantedAuthorities = grantedAuthorities;
+    }
+
+    public static UserDetails fromUser(User user) {
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(), user.getPassword(), Collections.emptySet());
     }
 
     @Override
