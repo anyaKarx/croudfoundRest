@@ -20,7 +20,7 @@
     <changeSet id="171616361377-2" author="Anya">
         <createTable tableName="project">
             <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="зкщоусе_id_pk" nullable="false" unique="true"/>
+                <constraints primaryKey="true" primaryKeyName="project_id_pk" nullable="false" unique="true"/>
             </column>
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
