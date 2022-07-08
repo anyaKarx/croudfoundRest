@@ -2,6 +2,7 @@ package ru.cft.croudfounding.repository.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
@@ -19,6 +20,7 @@ import java.util.UUID;
 public class Project {
     @Id
     @Column(name = "id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -32,7 +34,7 @@ public class Project {
     @JsonFormat(pattern = "yyyy-MM-ddTHH:mm:ss.ZZZ")
     private LocalDateTime endDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "fk_project_parent_user"))
     @JsonBackReference
     private User parent;
@@ -41,7 +43,7 @@ public class Project {
     private Long cashAmount;
 
     @Column(name = "cash_donated", nullable = false)
-    private Long cashDonated ;
+    private Long cashDonated;
 
     @Column(name = "description", nullable = false)
     private String description;
