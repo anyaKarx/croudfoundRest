@@ -19,14 +19,14 @@ public class UserService {
 
     public UserDTO findUserByEmail(String email)
     {
-        User tmp = userRepository.findUserByName(email).orElseThrow(() ->
+        User tmp = userRepository.findUserByEmail(email).orElseThrow(() ->
             new NotFoundDataException("Пользователя с таким email нет."));
          return mapper.exportUser(tmp);
 
     }
 
     public UserDTO prepareAndSave(String email, @Valid UserDTO newUser) {
-        User tmp = userRepository.findUserByName(email).orElseThrow(() ->
+        User tmp = userRepository.findUserByEmail(email).orElseThrow(() ->
                 new NotFoundDataException("Пользователя с таким email нет."));
         tmp = mapper.importUser(newUser);
         userRepository.save(tmp);
