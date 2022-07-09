@@ -1,11 +1,15 @@
 package ru.cft.croudfounding.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import ru.cft.croudfounding.model.ProjectUnitDTO;
 import ru.cft.croudfounding.repository.ProjectRepository;
 import ru.cft.croudfounding.repository.mapper.croudfoundingMapper;
 import ru.cft.croudfounding.repository.model.Project;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,5 +23,15 @@ public class ProjectService {
         project = projectRepository.save(project);
         newProject.setId(project.getId());
         return newProject;
+    }
+
+    public List<Project> findAll() {
+        return projectRepository.findAll();
+    }
+
+    public Project getProjectByName(String name) {
+        Project project = projectRepository.findByName(name).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
+        return project;
     }
 }
