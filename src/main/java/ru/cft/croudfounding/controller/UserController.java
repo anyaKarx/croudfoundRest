@@ -29,8 +29,8 @@ public class UserController {
                             description = "Пользователь не найден.",
                             content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
             })
-    @GetMapping("/users/{email}")
-    public UserDTO get(@PathVariable String email) {
+    @GetMapping("/user/")
+    public UserDTO get(@RequestParam(name = "email") String email) {
         return userService.findUserByEmail(email);
     }
 

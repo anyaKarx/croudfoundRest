@@ -28,19 +28,19 @@
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="dateStart" type="datetime">
+            <column name="start_date" type="datetime">
                 <constraints nullable="false"/>
             </column>
-            <column name="dateFinish" type="datetime">
+            <column name="end_date" type="datetime">
                 <constraints nullable="false"/>
             </column>
-            <column name="required amount" type="numeric">
+            <column name="cash_amount" type="numeric">
                 <constraints nullable="false"/>
             </column>
-            <column name="collected amount" type="numeric">
+            <column name="cash_donated" type="numeric">
                 <constraints nullable="true"/>
             </column>
-            <column name="parent" type="bigint">
+            <column name="parent_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="varchar(3000)">
@@ -48,7 +48,7 @@
             </column>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="project" baseColumnNames="parent"
+        <addForeignKeyConstraint baseTableName="project" baseColumnNames="parent_id"
                                  constraintName="fk_project_parent_user"
                                  referencedTableName="user" referencedColumnNames="id"
                                  onDelete ="CASCADE"/>
@@ -59,7 +59,7 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="donation_id_pk" nullable="false" unique="true"/>
             </column>
-            <column name="price" type="numeric">
+            <column name="amount" type="numeric">
                 <constraints nullable="false"/>
             </column>
             <column name="id_user" type="bigint">
