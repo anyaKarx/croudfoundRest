@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "project")
 public class Project {
+
     @Id
     @Column(name = "id")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

@@ -1,6 +1,7 @@
 package ru.cft.croudfounding.repository.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ public class User {
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private long id;
 
     @Column(name = "name", nullable = false)
@@ -24,6 +26,7 @@ public class User {
     private String email;
 
     @Column(name = "password", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
