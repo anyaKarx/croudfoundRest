@@ -21,16 +21,15 @@ public class AuthController {
 
     @PostMapping("/register")
     public User register(@RequestBody User newUser) {
-        if (userService.findUserByEmail(newUser.getEmail()).isPresent()) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Email already taken");
-        }
         userService.save(newUser);
         return newUser;
     }
 
     @PostMapping("/login")
     public User login(@AuthenticationPrincipal UserDetails userDetails) {
-        return userService.findUserByEmail(userDetails.getUsername());
+        return userService.findUserByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new ResponseStatusException(
+                                HttpStatus.BAD_REQUEST, ""
+                        ));
     }
 }

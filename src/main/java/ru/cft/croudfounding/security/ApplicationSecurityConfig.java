@@ -1,5 +1,6 @@
 package ru.cft.croudfounding.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,6 +13,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.cft.croudfounding.auth.ApplicationUserService;
+import ru.cft.croudfounding.jwt.JwtConfig;
+import ru.cft.croudfounding.jwt.JwtTokenVerificationFilter;
+import ru.cft.croudfounding.jwt.JwtUsernameAndPasswordAuthenticationFilter;
+
+import javax.crypto.SecretKey;
 
 @Configuration
 @EnableWebSecurity
@@ -20,26 +26,32 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
     private final ApplicationUserService applicationUserService;
-
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    private final JwtConfig jwtConfig;
+    private final SecretKey secretKey;
 
+    @Autowired
     public ApplicationSecurityConfig(PasswordEncoder passwordEncoder,
                                      ApplicationUserService applicationUserService,
-                                     RestAuthenticationEntryPoint restAuthenticationEntryPoint) {
+                                     RestAuthenticationEntryPoint restAuthenticationEntryPoint,
+                                     JwtConfig jwtConfig,
+                                     SecretKey secretKey) {
         this.passwordEncoder = passwordEncoder;
         this.applicationUserService = applicationUserService;
         this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
+        this.jwtConfig = jwtConfig;
+        this.secretKey = secretKey;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .httpBasic()
-                .and()
                 .csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
+                .addFilterAfter(new JwtTokenVerificationFilter(secretKey, jwtConfig),JwtUsernameAndPasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(restAuthenticationEntryPoint)
                 .and()

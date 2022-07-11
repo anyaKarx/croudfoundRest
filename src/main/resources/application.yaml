@@ -12,3 +12,9 @@ spring:
 
 passwordEncoder:
   strength: 13
+
+application:
+  jwt:
+    secretKey: Y3Jvd2Rmb3VuZGluZy1wbGF0Zm9ybS1zaGlmdC0yMDIy
+    tokenPrefix: Bearer
+    tokenExpirationAfterDays: 7
