@@ -1,6 +1,7 @@
 package ru.cft.croudfounding.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,8 +26,8 @@ public class ProjectService {
         return newProject;
     }
 
-    public List<Project> findAll() {
-        return projectRepository.findAll();
+    public List<Project> findAll(Pageable pageable) {
+        return projectRepository.findAll(pageable).getContent();
     }
 
     public Project getProjectByName(String name) {

@@ -5,6 +5,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import ru.cft.croudfounding.model.ErrorDTO;
 import ru.cft.croudfounding.model.ProjectUnitDTO;
@@ -39,8 +42,9 @@ public class ProjectController {
     }
 
     @GetMapping
-    public List<Project> getAllProject() {
-        return projectService.findAll();
+    public List<Project> getAllProjects(
+            @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        return projectService.findAll(pageable);
     }
 
     @GetMapping("/{projectName}")

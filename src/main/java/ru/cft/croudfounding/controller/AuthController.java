@@ -1,12 +1,11 @@
 package ru.cft.croudfounding.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
+import ru.cft.croudfounding.model.UserDTO;
 import ru.cft.croudfounding.repository.model.User;
 import ru.cft.croudfounding.service.UserService;
 
@@ -26,10 +25,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public User login(@AuthenticationPrincipal UserDetails userDetails) {
-        return userService.findUserByEmail(userDetails.getUsername())
-                .orElseThrow(() -> new ResponseStatusException(
-                                HttpStatus.BAD_REQUEST, ""
-                        ));
+    public UserDTO login(@AuthenticationPrincipal UserDetails userDetails) {
+        return userService.findUserByEmail(userDetails.getUsername());
     }
 }

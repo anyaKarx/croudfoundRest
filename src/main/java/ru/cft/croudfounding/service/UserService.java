@@ -20,9 +20,10 @@ public class UserService {
     private final croudfoundingMapper mapper;
 
     public UserDTO findUserByEmail(String email) {
-        User tmp = userRepository.findUserByEmail(email).orElseThrow(() ->
-            new NotFoundDataException("Пользователя с таким email нет."));
-         return mapper.exportUser(tmp);
+        User tmp = userRepository.findUserByEmail(email).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "" // message???
+        ));
+        return mapper.exportUser(tmp);
 
     }
 
