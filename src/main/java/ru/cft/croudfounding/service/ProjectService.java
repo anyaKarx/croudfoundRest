@@ -3,24 +3,38 @@ package ru.cft.croudfounding.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import ru.cft.croudfounding.auth.ApplicationUser;
+import ru.cft.croudfounding.exception.NotFoundDataException;
 import ru.cft.croudfounding.model.ProjectUnitDTO;
+import ru.cft.croudfounding.model.ProjectUnitPreviewResponseDTO;
 import ru.cft.croudfounding.repository.ProjectRepository;
+import ru.cft.croudfounding.repository.UserRepository;
 import ru.cft.croudfounding.repository.mapper.croudfoundingMapper;
 import ru.cft.croudfounding.repository.model.Project;
+import ru.cft.croudfounding.repository.model.User;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final UserRepository userRepository;
     private final croudfoundingMapper mapper;
 
-    public ProjectUnitDTO saveProject(ProjectUnitDTO newProject) {
+    public ProjectUnitDTO saveProject(ProjectUnitDTO newProject) throws IllegalAccessException {
+        ApplicationUser principal = (ApplicationUser)
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findUserByEmail(principal.getUsername()).orElseThrow(() ->
+                new NotFoundDataException("User dos-nt exist"));
         Project project = mapper.importProject(newProject);
+        if (!project.getParent().getEmail().equals(user.getEmail()))
+            throw new IllegalAccessException("Создание проекта не под своим аккаунтом");
         project = projectRepository.save(project);
         newProject.setId(project.getId());
         return newProject;
@@ -34,5 +48,15 @@ public class ProjectService {
         Project project = projectRepository.findByName(name).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
         return project;
+    }
+
+    public ProjectUnitPreviewResponseDTO findAllByParent(String email) {
+        User user = userRepository.findUserByEmail(email).orElseThrow(() ->
+                new NotFoundDataException("User dos-nt exist"));
+        var projects = projectRepository.findAllByParent(user);
+        var projectDTO = projects.stream()
+                .map(project -> mapper.exportProjectPreview(project))
+                .collect(Collectors.toList());
+        return new ProjectUnitPreviewResponseDTO(projectDTO);
     }
 }

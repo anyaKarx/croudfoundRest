@@ -46,9 +46,9 @@ public class UserController {
                             description = "Такой пользователь не найден.",
                             content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
             })
-    @PutMapping("/users/{email}/edit")
+    @PutMapping("/users/edit")
     @Transactional
-    public UserDTO update(@PathVariable String email, @RequestBody @Valid UserDTO newUser) {
+    public UserDTO update(@RequestParam(name = "email") String email, @RequestBody @Valid UserDTO newUser) {
         return userService.prepareAndSave(email, newUser);
     }
 

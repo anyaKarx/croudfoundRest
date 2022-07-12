@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import lombok.*;
 import lombok.experimental.Accessors;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -47,5 +48,11 @@ public class ProjectUnitPreviewDTO {
 
     @Parameter(description = "Дата открытия сбора.")
     private LocalDateTime startDate;
+
+    @JsonProperty("End date")
+    @Parameter(description = " Дата окончания сбора.")
+    @NotNull
+    @Valid
+    private LocalDateTime endDate;
 
 }
