@@ -31,7 +31,7 @@ public class UserController {
             })
     @GetMapping("/user/")
     public UserDTO get(@RequestParam(name = "email") String email) {
-        return userService.findUserByEmail(email);
+        return userService.getUserDTOByEmail(email);
     }
 
     @Operation(summary = "Отредактировать пользователя",

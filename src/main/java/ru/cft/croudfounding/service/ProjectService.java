@@ -24,14 +24,13 @@ import java.util.stream.Collectors;
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final croudfoundingMapper mapper;
 
     public ProjectUnitDTO saveProject(ProjectUnitDTO newProject) throws IllegalAccessException {
         ApplicationUser principal = (ApplicationUser)
                 SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findUserByEmail(principal.getUsername()).orElseThrow(() ->
-                new NotFoundDataException("User dos-nt exist"));
+        User user = userService.findUserByEmail(principal.getUsername());
         Project project = mapper.importProject(newProject);
         if (!project.getParent().getEmail().equals(user.getEmail()))
             throw new IllegalAccessException("Создание проекта не под своим аккаунтом");
@@ -51,8 +50,7 @@ public class ProjectService {
     }
 
     public ProjectUnitPreviewResponseDTO findAllByParent(String email) {
-        User user = userRepository.findUserByEmail(email).orElseThrow(() ->
-                new NotFoundDataException("User dos-nt exist"));
+        User user = userService.findUserByEmail(email);
         var projects = projectRepository.findAllByParent(user);
         var projectDTO = projects.stream()
                 .map(project -> mapper.exportProjectPreview(project))

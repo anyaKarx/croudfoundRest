@@ -19,11 +19,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final croudfoundingMapper mapper;
 
-    public UserDTO findUserByEmail(String email) {
-        User tmp = userRepository.findUserByEmail(email).orElseThrow(() -> new ResponseStatusException(
+    public User findUserByEmail(String email) {
+        return  userRepository.findUserByEmail(email).orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, "" // message???
         ));
-        return mapper.exportUser(tmp);
 
     }
 
@@ -45,5 +44,12 @@ public class UserService {
                     HttpStatus.BAD_REQUEST, "Email already taken");
         }
         userRepository.save(user);
+    }
+
+    public UserDTO getUserDTOByEmail(String username) {
+        var user = userRepository.findUserByEmail(username).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "" // message???
+        ));
+        return mapper.exportUser(user);
     }
 }

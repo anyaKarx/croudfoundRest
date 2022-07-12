@@ -26,6 +26,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public UserDTO login(@AuthenticationPrincipal UserDetails userDetails) {
-        return userService.findUserByEmail(userDetails.getUsername());
+        return userService.getUserDTOByEmail(userDetails.getUsername());
     }
 }
