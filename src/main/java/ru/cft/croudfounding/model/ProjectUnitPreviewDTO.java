@@ -2,22 +2,22 @@ package ru.cft.croudfounding.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.Parameter;
-import lombok.*;
-import lombok.experimental.Accessors;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Data
 @AllArgsConstructor
-@NoArgsConstructor
-@Accessors(chain = true)
 public class ProjectUnitPreviewDTO {
     @JsonProperty("id")
     @Parameter(description = "Уникальный идентификатор")
-    @NonNull
+    @NotNull
     private Long id;
 
     @JsonProperty("name")
@@ -47,5 +47,11 @@ public class ProjectUnitPreviewDTO {
 
     @Parameter(description = "Дата открытия сбора.")
     private LocalDateTime startDate;
+
+    @JsonProperty("End date")
+    @Parameter(description = " Дата окончания сбора.")
+    @NotNull
+    @Valid
+    private LocalDateTime endDate;
 
 }

@@ -6,7 +6,8 @@
     <changeSet id="171616361377-1" author="Anya">
         <createTable tableName="user">
             <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="user_id_pk" nullable="false" unique="true" uniqueConstraintName="user_id"/>
+                <constraints primaryKey="true" primaryKeyName="user_id_pk" nullable="false" unique="true"
+                             uniqueConstraintName="user_id"/>
             </column>
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
@@ -51,7 +52,7 @@
         <addForeignKeyConstraint baseTableName="project" baseColumnNames="parent_id"
                                  constraintName="fk_project_parent_user"
                                  referencedTableName="user" referencedColumnNames="id"
-                                 onDelete ="CASCADE"/>
+                                 onDelete="CASCADE"/>
     </changeSet>
 
     <changeSet id="171616361377-3" author="Anya">
@@ -62,18 +63,18 @@
             <column name="amount" type="numeric">
                 <constraints nullable="false"/>
             </column>
-            <column name="id_user" type="bigint">
+            <column name="user_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="id_project" type="bigint">
+            <column name="project_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="donation" baseColumnNames="id_user"
+        <addForeignKeyConstraint baseTableName="donation" baseColumnNames="user_id"
                                  constraintName="fk_user_donation"
                                  referencedTableName="user" referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="donation" baseColumnNames="id_project"
+        <addForeignKeyConstraint baseTableName="donation" baseColumnNames="project_id"
                                  constraintName="fk_project_donation"
                                  referencedTableName="project" referencedColumnNames="id"/>
     </changeSet>

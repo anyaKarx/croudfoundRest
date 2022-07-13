@@ -3,6 +3,7 @@ package ru.cft.croudfounding.repository.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.cft.croudfounding.model.ProjectUnitDTO;
+import ru.cft.croudfounding.model.ProjectUnitPreviewDTO;
 import ru.cft.croudfounding.model.UserDTO;
 import ru.cft.croudfounding.repository.model.Project;
 import ru.cft.croudfounding.repository.model.User;
@@ -25,5 +26,10 @@ public interface croudfoundingMapper {
     @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
     ProjectUnitDTO exportProject(Project project);
+
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "parentName", ignore = true)
+  ProjectUnitPreviewDTO exportProjectPreview(Project project);
 
 }
