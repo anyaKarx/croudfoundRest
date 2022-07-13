@@ -50,6 +50,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .csrf().disable()
+                .cors().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
