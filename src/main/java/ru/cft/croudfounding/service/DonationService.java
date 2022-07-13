@@ -16,8 +16,8 @@ public class DonationService {
 
     public void saveDonation(User user, Project project, DonateRequest donateRequest) {
         Donation donation = new Donation();
-        donation.setUser(user);
-        donation.setProject(project);
+        donation.setIdUser(user);
+        donation.setIdProject(project);
         donation.setAmount(donateRequest.getDonationAmount());
         donationRepository.save(donation);
     }

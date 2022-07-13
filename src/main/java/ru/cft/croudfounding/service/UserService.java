@@ -8,7 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.cft.croudfounding.exception.NotFoundDataException;
 import ru.cft.croudfounding.model.UserDTO;
 import ru.cft.croudfounding.repository.UserRepository;
-import ru.cft.croudfounding.repository.mapper.croudfoundingMapper;
+import ru.cft.croudfounding.repository.mapper.crowdfundingMapper;
 import ru.cft.croudfounding.repository.model.User;
 
 import javax.validation.Valid;
@@ -19,7 +19,7 @@ import java.util.Locale;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final croudfoundingMapper mapper;
+    private final crowdfundingMapper mapper;
     private final PasswordEncoder encoder;
 
 //    public UserDTO findUserByEmail(String email) {

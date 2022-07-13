@@ -11,7 +11,7 @@ import ru.cft.croudfounding.model.DonateRequest;
 import ru.cft.croudfounding.model.ProjectUnitDTO;
 import ru.cft.croudfounding.model.ProjectUnitPreviewResponseDTO;
 import ru.cft.croudfounding.repository.ProjectRepository;
-import ru.cft.croudfounding.repository.mapper.croudfoundingMapper;
+import ru.cft.croudfounding.repository.mapper.crowdfundingMapper;
 import ru.cft.croudfounding.repository.model.Project;
 import ru.cft.croudfounding.repository.model.User;
 
@@ -24,7 +24,7 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final UserService userService;
-    private final croudfoundingMapper mapper;
+    private final crowdfundingMapper mapper;
 
     public ProjectUnitDTO saveProject(ProjectUnitDTO newProject) {
         ApplicationUser principal = (ApplicationUser)
@@ -51,7 +51,7 @@ public class ProjectService {
         User user = userService.findUserByEmail(email);
         var projects = projectRepository.findAllByParent(user);
         var projectDTO = projects.stream()
-                .map(project -> mapper.exportProjectPreview(project))
+                .map(mapper::exportProjectPreview)
                 .collect(Collectors.toList());
         return new ProjectUnitPreviewResponseDTO(projectDTO);
     }

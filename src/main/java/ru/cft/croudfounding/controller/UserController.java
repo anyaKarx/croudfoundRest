@@ -49,10 +49,10 @@ public class UserController {
                             description = "Такой пользователь не найден.",
                             content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
             })
-    @PutMapping("/edit/{email}")
+    @PutMapping("/{email}/edit")
     @Transactional
-    public UserDTO update(@PathVariable String email, @RequestBody @Valid UserDTO userUpdate) {
-        return userService.prepareAndSave(email, userUpdate);
+    public UserDTO update(@PathVariable String email, @RequestBody @Valid UserDTO updatedUser) {
+        return userService.prepareAndSave(email, updatedUser);
     }
 
     @GetMapping("/{email}/projects")
