@@ -1,4 +1,4 @@
-package ru.cft.croudfounding.jwt;
+package ru.cft.croudfounding.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
@@ -51,6 +51,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter
 
         } catch (IOException e) {
             throw new RuntimeException(e);
+            //throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found");
         }
 
     }

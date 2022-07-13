@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -13,9 +14,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.cft.croudfounding.auth.ApplicationUserService;
-import ru.cft.croudfounding.jwt.JwtConfig;
-import ru.cft.croudfounding.jwt.JwtTokenVerificationFilter;
-import ru.cft.croudfounding.jwt.JwtUsernameAndPasswordAuthenticationFilter;
+import ru.cft.croudfounding.security.jwt.JwtConfig;
+import ru.cft.croudfounding.security.jwt.JwtTokenVerificationFilter;
+import ru.cft.croudfounding.security.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 
 import javax.crypto.SecretKey;
 
@@ -46,12 +47,20 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .cors()
+                .and()
                 .csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, secretKey))
-                .addFilterAfter(new JwtTokenVerificationFilter(secretKey, jwtConfig),JwtUsernameAndPasswordAuthenticationFilter.class)
+                .addFilter(
+                        new JwtUsernameAndPasswordAuthenticationFilter(
+                                authenticationManager(),
+                                jwtConfig,
+                                secretKey))
+                .addFilterAfter(
+                        new JwtTokenVerificationFilter(secretKey, jwtConfig),
+                        JwtUsernameAndPasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(restAuthenticationEntryPoint)
                 .and()
@@ -74,5 +83,4 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         provider.setUserDetailsService(applicationUserService);
         return provider;
     }
-
 }
