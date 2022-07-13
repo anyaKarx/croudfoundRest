@@ -9,7 +9,7 @@ import ru.cft.croudfounding.repository.model.Project;
 import ru.cft.croudfounding.repository.model.User;
 
 @Mapper(componentModel = "spring", imports = UserDTO.class)
-public interface croudfoundingMapper {
+public interface crowdfundingMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "name", source = "name")
@@ -30,6 +30,6 @@ public interface croudfoundingMapper {
     @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
     @Mapping(target = "parentName", ignore = true)
-  ProjectUnitPreviewDTO exportProjectPreview(Project project);
+    ProjectUnitPreviewDTO exportProjectPreview(Project project);
 
 }
