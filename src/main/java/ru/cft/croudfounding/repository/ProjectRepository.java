@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface ProjectRepository extends PagingAndSortingRepository<Project, Long> {
 
     Optional<Project> findByName(String name);
+
     List<Project> findAllByParent(User parent);
 }

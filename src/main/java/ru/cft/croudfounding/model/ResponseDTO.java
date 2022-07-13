@@ -1,15 +1,13 @@
 package ru.cft.croudfounding.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @Getter
 @Setter
-@Builder
-@Accessors(chain = true)
+@AllArgsConstructor
 public class ResponseDTO {
     @Schema(description = "Код ответа")
     private final int resultCode;

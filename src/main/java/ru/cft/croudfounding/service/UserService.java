@@ -20,22 +20,17 @@ public class UserService {
     private final croudfoundingMapper mapper;
 
     public User findUserByEmail(String email) {
-        return  userRepository.findUserByEmail(email).orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.BAD_REQUEST, "" // message???
+        return userRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "User not found"
         ));
-
     }
 
     public UserDTO prepareAndSave(String email, @Valid UserDTO newUser) {
-        User tmp = userRepository.findUserByEmail(email).orElseThrow(() ->
+        User tmp = userRepository.findByEmail(email).orElseThrow(() ->
                 new NotFoundDataException("Пользователя с таким email нет."));
         tmp = mapper.importUser(newUser);
         userRepository.save(tmp);
         return newUser;
-    }
-
-    public boolean existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
     }
 
     public void save(User user) {
@@ -47,8 +42,8 @@ public class UserService {
     }
 
     public UserDTO getUserDTOByEmail(String username) {
-        var user = userRepository.findUserByEmail(username).orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.BAD_REQUEST, "" // message???
+        var user = userRepository.findByEmail(username).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "User not found"
         ));
         return mapper.exportUser(user);
     }

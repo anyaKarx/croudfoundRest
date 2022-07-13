@@ -5,18 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Setter
 @Getter
-@Accessors(chain = true)
-@NoArgsConstructor
+@Setter
 @AllArgsConstructor
 public class ProjectUnitDTO {
     @JsonProperty("id")

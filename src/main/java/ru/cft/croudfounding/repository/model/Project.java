@@ -2,11 +2,11 @@ package ru.cft.croudfounding.repository.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,33 +16,39 @@ import java.time.LocalDateTime;
 public class Project {
 
     @Id
+    @GeneratedValue
     @Column(name = "id")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
+    @NotNull
     private String name;
 
-    @Column(name = "start_date", nullable = false)
+    @Column(name = "start_date")
     @JsonFormat(pattern = "yyyy-MM-ddTHH:mm:ss.ZZZ")
-    private LocalDateTime date;
+    @NotNull
+    private LocalDateTime startDate;
 
-    @Column(name = "end_date", nullable = false)
+    @Column(name = "end_date")
     @JsonFormat(pattern = "yyyy-MM-ddTHH:mm:ss.ZZZ")
+    @NotNull
     private LocalDateTime endDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "fk_project_parent_user"))
     @JsonBackReference
+    @NotNull
     private User parent;
 
-    @Column(name = "cash_amount", nullable = false)
+    @Column(name = "cash_amount")
+    @NotNull
     private Long cashAmount;
 
-    @Column(name = "cash_donated", nullable = false)
+    @Column(name = "cash_donated")
+    @NotNull
     private Long cashDonated;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
+    @NotNull
     private String description;
-
 }
