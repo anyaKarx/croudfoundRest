@@ -1,36 +1,30 @@
 package ru.cft.croudfounding.repository.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "donation")
+@Data
 public class Donation {
 
     @Id
-    @GeneratedValue
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id", foreignKey = @ForeignKey(name = "fk_project_donation"))
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "id_project", foreignKey = @ForeignKey(name = "fk_project_donation"))
     @JsonBackReference
-    @NotNull
-    private Project project;
+    private Project idProject;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_user_donation"))
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "id_user", foreignKey = @ForeignKey(name = "fk_user_donation"))
     @JsonBackReference
-    @NotNull
-    private User user;
+    private User idUser;
 
-    @Column(name = "amount")
-    @NotNull
+    @Column(name = "amount", nullable = false)
     private Long amount;
+
 }
