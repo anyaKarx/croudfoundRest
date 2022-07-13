@@ -1,15 +1,19 @@
-package ru.cft.croudfounding.jwt;
+package ru.cft.croudfounding.security.jwt;
 
 import com.google.common.net.HttpHeaders;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
-@ConfigurationProperties(prefix = "application.jwt")
 @Configuration
 public class JwtConfig {
 
+    @Value("${application.jwt.secretKey}")
     private String secretKey;
+
+    @Value("${application.jwt.tokenPrefix}")
     private String tokenPrefix;
+
+    @Value("${application.jwt.tokenExpirationAfterDays}")
     private Integer tokenExpirationAfterDays;
 
     public JwtConfig() {

@@ -43,9 +43,8 @@ public class ProjectService {
     }
 
     public Project getProjectByName(String name) {
-        Project project = projectRepository.findByName(name).orElseThrow(() ->
+        return projectRepository.findByName(name).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
-        return project;
     }
 
     public ProjectUnitPreviewResponseDTO findAllByParent(String email) {

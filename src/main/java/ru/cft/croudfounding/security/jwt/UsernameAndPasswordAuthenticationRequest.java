@@ -1,4 +1,4 @@
-package ru.cft.croudfounding.jwt;
+package ru.cft.croudfounding.security.jwt;
 
 public class UsernameAndPasswordAuthenticationRequest {
 

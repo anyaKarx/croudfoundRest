@@ -1,4 +1,4 @@
-package ru.cft.croudfounding.jwt;
+package ru.cft.croudfounding.security.jwt;
 
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
