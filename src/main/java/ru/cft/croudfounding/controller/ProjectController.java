@@ -8,12 +8,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import ru.cft.croudfounding.model.DonateRequest;
 import ru.cft.croudfounding.model.ErrorDTO;
 import ru.cft.croudfounding.model.ProjectUnitDTO;
-import ru.cft.croudfounding.model.ProjectUnitPreviewResponseDTO;
 import ru.cft.croudfounding.repository.model.Project;
+import ru.cft.croudfounding.repository.model.User;
+import ru.cft.croudfounding.service.DonationService;
 import ru.cft.croudfounding.service.ProjectService;
+import ru.cft.croudfounding.service.UserService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -24,6 +31,8 @@ import java.util.List;
 public class ProjectController {
 
     private final ProjectService projectService;
+    private final DonationService donationService;
+    private final UserService userService;
 
     @Operation(summary = "Создать проект.",
             responses = {
@@ -38,7 +47,7 @@ public class ProjectController {
                             content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
             })
     @PostMapping("/new")
-    public ProjectUnitDTO addProject(@RequestBody @Valid ProjectUnitDTO newProject) throws IllegalAccessException {
+    public ProjectUnitDTO addProject(@RequestBody @Valid ProjectUnitDTO newProject) {
         return projectService.saveProject(newProject);
     }
 
@@ -53,10 +62,14 @@ public class ProjectController {
         return projectService.getProjectByName(projectName);
     }
 
-    @PostMapping(" /users/{email}/projects")
-    public ProjectUnitPreviewResponseDTO findAllChildrenProjects( @PathVariable String email)
-    {
-        return projectService.findAllByParent(email);
+    @PostMapping("/{projectName}/donate")
+    public ResponseEntity donateToProject(@PathVariable String projectName,
+                                          @RequestBody DonateRequest donateRequest,
+                                          @AuthenticationPrincipal UserDetails userDetails) {
+        projectService.donateToProject(projectName, donateRequest);
+        User donator = userService.findUserByEmail(userDetails.getUsername());
+        Project project = getProjectByName(projectName);
+        donationService.saveDonation(donator, project, donateRequest);
+        return new ResponseEntity(HttpStatus.OK);
     }
-
 }
