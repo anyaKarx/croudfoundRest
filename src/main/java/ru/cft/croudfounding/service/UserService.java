@@ -22,13 +22,13 @@ public class UserService {
     private final crowdfundingMapper mapper;
     private final PasswordEncoder encoder;
 
-//    public UserDTO findUserByEmail(String email) {
-//        User tmp = userRepository.findUserByEmailIgnoreCase(email).orElseThrow(() -> new ResponseStatusException(
-//                HttpStatus.BAD_REQUEST, "" // message???
-//        ));
-//        return mapper.exportUser(tmp);
-//
-//    }
+    public UserDTO findUserDTOByEmail(String email) {
+        User tmp = userRepository.findUserByEmailIgnoreCase(email).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "" // message???
+        ));
+        return mapper.exportUser(tmp);
+
+    }
 
     public UserDTO prepareAndSave(String email, @Valid UserDTO newUser) {
         User tmp = userRepository.findUserByEmailIgnoreCase(email).orElseThrow(() ->
