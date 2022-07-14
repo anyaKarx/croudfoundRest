@@ -12,6 +12,7 @@ public class ApplicationUser implements UserDetails {
     private final String username;
     private final String password;
     private final Set<? extends GrantedAuthority> grantedAuthorities;
+
     public ApplicationUser(String username,
                            String password,
                            Set<? extends GrantedAuthority> grantedAuthorities) {

@@ -5,28 +5,30 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "donation")
-@Setter
-@Getter
 public class Donation {
 
     @Id
+    @GeneratedValue
     @Column(name = "id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_project", foreignKey = @ForeignKey(name = "fk_project_donation"))
+    @JoinColumn(name = "project_id", foreignKey = @ForeignKey(name = "fk_project_donation"))
     @JsonBackReference
-    private Project idProject;
+    private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_user", foreignKey = @ForeignKey(name = "fk_user_donation"))
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_user_donation"))
     @JsonBackReference
-    private User idUser;
+    private User user;
 
-    @Column(name = "amount", nullable = false)
+    @Column(name = "amount")
+    @NotNull
     private Long amount;
-
 }

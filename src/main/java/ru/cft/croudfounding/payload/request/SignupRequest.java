@@ -8,14 +8,10 @@ import lombok.Setter;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Setter
 @Getter
+@Setter
 @AllArgsConstructor
 public class SignupRequest {
-
-    @JsonProperty("password")
-    @NotNull
-    private String password;
 
     @JsonProperty("name")
     @NotNull
@@ -23,7 +19,9 @@ public class SignupRequest {
 
     @JsonProperty("email")
     @NotNull
-    @Size(min = 1, message = "{Size.userDto.email}")
     private String email;
 
+    @JsonProperty("password")
+    @NotNull
+    private String password;
 }

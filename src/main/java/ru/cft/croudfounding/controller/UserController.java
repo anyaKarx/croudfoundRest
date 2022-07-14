@@ -28,8 +28,8 @@ public class UserController {
 
     @PutMapping("/profile/edit")
     @Transactional
-    public UserInfoResponse update( @RequestBody @Valid SignupRequest updatedUser) {
-        return userService.updateUserInfo( updatedUser);
+    public UserInfoResponse update(@RequestBody @Valid SignupRequest updatedUser) {
+        return userService.updateUserInfo(updatedUser);
     }
 
     @GetMapping(value = "/{userId}/projects")

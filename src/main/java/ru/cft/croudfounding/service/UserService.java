@@ -6,8 +6,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import ru.cft.croudfounding.auth.ApplicationUser;
-import ru.cft.croudfounding.exception.NotFoundDataException;
 import ru.cft.croudfounding.payload.request.SignupRequest;
 import ru.cft.croudfounding.payload.response.UserInfoResponse;
 import ru.cft.croudfounding.repository.UserRepository;
@@ -25,17 +23,10 @@ public class UserService {
     private final CrowdfundingMapper mapper;
     private final PasswordEncoder encoder;
 
-    public UserInfoResponse findUserDTOByEmail(String email) {
-        User tmp = userRepository.findUserByEmailIgnoreCase(email).orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.BAD_REQUEST, "" // message???
-        ));
-        return mapper.exportUser(tmp);
-
-    }
-
     public UserInfoResponse updateUserInfo(@Valid SignupRequest updateInfo) {
         User tmp = userRepository.findUserByEmailIgnoreCase(updateInfo.getEmail()).orElseThrow(() ->
-                new NotFoundDataException("Пользователя с таким email нет."));
+                new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        String.format("User with email \"%s\" not found", updateInfo.getEmail())));
         var newUser = mapper.importUser(updateInfo);
         newUser.setId(tmp.getId());
         return mapper.exportUser(userRepository.save(newUser));
@@ -50,11 +41,7 @@ public class UserService {
     public User findUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        String.format("User  not found")));
-    }
-
-    public boolean existsByEmail(String email) {
-        return userRepository.existsByEmailIgnoreCase(email);
+                        "User not found"));
     }
 
     public void save(User user) {
@@ -68,10 +55,8 @@ public class UserService {
     }
 
     public UserInfoResponse findUserDTOByAuth() {
-
         var authUser = SecurityContextHolder.getContext().getAuthentication();
         User user = findUserByEmail(authUser.getName());
         return mapper.exportUser(user);
-
     }
 }

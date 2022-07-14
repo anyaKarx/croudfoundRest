@@ -47,7 +47,7 @@ public class ProjectService {
     }
 
     public ProjectInfoResponse getProjectResponseByName(String name) {
-        var project = getProjectByName( name);
+        var project = getProjectByName(name);
         return mapper.exportProject(project);
     }
 
@@ -62,7 +62,7 @@ public class ProjectService {
 
     public void donateToProject(String projectName, DonateRequest donateRequest) {
         Project project = getProjectByName(projectName);
-        project.setCashDonated(project.getCashDonated() + donateRequest.getDonationAmount());
+        project.setCollectedAmount(project.getCollectedAmount() + donateRequest.getDonationAmount());
         projectRepository.save(project);
     }
 }

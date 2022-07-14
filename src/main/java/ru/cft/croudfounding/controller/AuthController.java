@@ -27,7 +27,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public UserInfoResponse login(@RequestBody LoginRequest loginRequest) {
-        User authUser = userService.findUserByEmail(loginRequest.getUsername());
+        User authUser = userService.findUserByEmail(loginRequest.getEmail());
         return mapper.exportUser(authUser);
     }
 

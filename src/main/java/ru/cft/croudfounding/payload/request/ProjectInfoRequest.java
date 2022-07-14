@@ -17,35 +17,35 @@ import java.time.LocalDateTime;
 public class ProjectInfoRequest {
 
     @JsonProperty("name")
-    @Parameter(description = " Название проекта.")
+    @Parameter(description = "Название проекта")
     @NotNull
     private String name;
 
-    @JsonProperty("Start date")
-    @Parameter(description = " Дата начала сбора.")
+    @JsonProperty("start_date")
+    @Parameter(description = "Дата начала сбора")
     @NotNull
     @Valid
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private LocalDateTime date;
+    private LocalDateTime startDate;
 
-    @JsonProperty("End date")
-    @Parameter(description = " Дата окончания сбора.")
+    @JsonProperty("end_date")
+    @Parameter(description = "Дата окончания сбора")
     @NotNull
     @Valid
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime endDate;
 
-    @JsonProperty("required amount")
-    @Parameter(description = "Целое число, сумма сбора.")
+    @JsonProperty("required_amount")
+    @Parameter(description = "Целое число, сумма сбора")
     @NotNull
-    private Long cashAmount;
+    private Long requiredAmount;
 
-    @JsonProperty("collected amount")
-    @Parameter(description = "Целое число, уже собранная сумма.")
+    @JsonProperty("collected_amount")
+    @Parameter(description = "Целое число, уже собранная сумма")
     @NotNull
-    private Long cashDonated;
+    private Long collectedAmount;
 
-    @JsonProperty("Description")
+    @JsonProperty("description")
     @Parameter(description = "Описание проекта")
     @NotNull
     private String description;

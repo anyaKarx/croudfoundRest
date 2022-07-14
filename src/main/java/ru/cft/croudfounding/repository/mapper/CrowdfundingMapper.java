@@ -35,5 +35,4 @@ public interface CrowdfundingMapper {
     @Mapping(target = "name", source = "name")
     @Mapping(target = "parentName", ignore = true)
     ProjectUnitPreviewResponse exportProjectPreview(Project project);
-
 }

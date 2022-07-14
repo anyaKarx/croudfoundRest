@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class ProjectsUnitPreviewResponse {
+
     @Parameter(description = "Экспортируемые элементы")
     private List<ProjectUnitPreviewResponse> items;
-
 }
