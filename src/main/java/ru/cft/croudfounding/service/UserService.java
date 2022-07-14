@@ -34,7 +34,8 @@ public class UserService {
 
     public User findUserByEmail(String email) {
         return userRepository.findUserByEmailIgnoreCase(email).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
                         String.format("User with email \"%s\" not found", email)));
     }
 
@@ -44,7 +45,7 @@ public class UserService {
                         "User not found"));
     }
 
-    public void save(User user) {
+    public void register(User user) {
         if (userRepository.existsByEmailIgnoreCase(user.getEmail())) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Email already taken");
