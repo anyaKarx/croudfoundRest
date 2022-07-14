@@ -1,4 +1,4 @@
-package ru.cft.croudfounding.model;
+package ru.cft.croudfounding.payload.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -8,10 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ResponseDTO {
-    @Schema(description = "Код ответа")
-    private final int resultCode;
-
+public class MessageResponse {
     @Schema(description = "Сообщение")
     private final String resultMessage;
 }

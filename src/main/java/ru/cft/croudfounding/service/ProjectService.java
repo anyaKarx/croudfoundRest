@@ -7,11 +7,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ru.cft.croudfounding.auth.ApplicationUser;
-import ru.cft.croudfounding.model.DonateRequest;
-import ru.cft.croudfounding.model.ProjectUnitDTO;
-import ru.cft.croudfounding.model.ProjectUnitPreviewResponseDTO;
+import ru.cft.croudfounding.payload.request.DonateRequest;
+import ru.cft.croudfounding.payload.request.ProjectInfoRequest;
+import ru.cft.croudfounding.payload.response.ProjectInfoResponse;
+import ru.cft.croudfounding.payload.response.ProjectsUnitPreviewResponse;
 import ru.cft.croudfounding.repository.ProjectRepository;
-import ru.cft.croudfounding.repository.mapper.crowdfundingMapper;
+import ru.cft.croudfounding.repository.mapper.CrowdfundingMapper;
 import ru.cft.croudfounding.repository.model.Project;
 import ru.cft.croudfounding.repository.model.User;
 
@@ -24,18 +25,16 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final UserService userService;
-    private final crowdfundingMapper mapper;
+    private final CrowdfundingMapper mapper;
 
-    public ProjectUnitDTO saveProject(ProjectUnitDTO newProject) {
+    public ProjectInfoResponse saveProject(ProjectInfoRequest newProject) {
         ApplicationUser principal = (ApplicationUser)
                 SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.findUserByEmail(principal.getUsername());
         Project project = mapper.importProject(newProject);
-        if (!project.getParent().getEmail().equals(user.getEmail()))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Создание проекта не под своим аккаунтом");
+        project.setParent(user);
         project = projectRepository.save(project);
-        newProject.setId(project.getId());
-        return newProject;
+        return mapper.exportProject(project);
     }
 
     public List<Project> findAll(Pageable pageable) {
@@ -47,13 +46,18 @@ public class ProjectService {
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
     }
 
-    public ProjectUnitPreviewResponseDTO findAllByParent(String email) {
-        User user = userService.findUserByEmail(email);
+    public ProjectInfoResponse getProjectResponseByName(String name) {
+        var project = getProjectByName( name);
+        return mapper.exportProject(project);
+    }
+
+    public ProjectsUnitPreviewResponse findAllByParent(Long id) {
+        User user = userService.findUserById(id);
         var projects = projectRepository.findAllByParent(user);
         var projectDTO = projects.stream()
                 .map(mapper::exportProjectPreview)
                 .collect(Collectors.toList());
-        return new ProjectUnitPreviewResponseDTO(projectDTO);
+        return new ProjectsUnitPreviewResponse(projectDTO);
     }
 
     public void donateToProject(String projectName, DonateRequest donateRequest) {

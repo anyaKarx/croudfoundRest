@@ -1,10 +1,10 @@
-package ru.cft.croudfounding.model;
+package ru.cft.croudfounding.payload.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 import javax.validation.Valid;
@@ -14,16 +14,30 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ProjectUnitPreviewDTO {
+public class ProjectInfoResponse {
     @JsonProperty("id")
-    @Parameter(description = "Уникальный идентификатор")
+    @Parameter(description = " Уникальный идентификатор.")
     @NotNull
     private Long id;
 
     @JsonProperty("name")
-    @Parameter(description = "Название проекта.")
+    @Parameter(description = " Название проекта.")
     @NotNull
     private String name;
+
+    @JsonProperty("Start date")
+    @Parameter(description = " Дата начала сбора.")
+    @NotNull
+    @Valid
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    private LocalDateTime date;
+
+    @JsonProperty("End date")
+    @Parameter(description = " Дата окончания сбора.")
+    @NotNull
+    @Valid
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    private LocalDateTime endDate;
 
     @JsonProperty("parentId")
     @Parameter(description = " Уникальный идентификатор пользователя владельца.")
@@ -45,13 +59,10 @@ public class ProjectUnitPreviewDTO {
     @NotNull
     private Long collectedAmount;
 
-    @Parameter(description = "Дата открытия сбора.")
-    private LocalDateTime startDate;
-
-    @JsonProperty("End date")
-    @Parameter(description = " Дата окончания сбора.")
+    @JsonProperty("Description")
+    @Parameter(description = "Описание проекта")
     @NotNull
-    @Valid
-    private LocalDateTime endDate;
+    private String description;
 
+    //TODO: картинки?дополнительные атрибуты
 }
