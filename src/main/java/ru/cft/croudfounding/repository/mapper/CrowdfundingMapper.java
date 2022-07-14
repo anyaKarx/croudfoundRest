@@ -19,7 +19,7 @@ public interface CrowdfundingMapper {
     User importUser(SignupRequest signupRequest);
 
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "username", source = "name")
+    @Mapping(target = "email", source = "email")
     UserInfoResponse exportUser(User user);
 
     @Mapping(target = "id", ignore = true)
