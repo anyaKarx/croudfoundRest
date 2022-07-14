@@ -3,10 +3,10 @@ package ru.cft.croudfounding.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import ru.cft.croudfounding.auth.ApplicationUser;
 import ru.cft.croudfounding.payload.request.DonateRequest;
 import ru.cft.croudfounding.payload.request.ProjectInfoRequest;
 import ru.cft.croudfounding.payload.response.ProjectInfoResponse;
@@ -28,9 +28,8 @@ public class ProjectService {
     private final CrowdfundingMapper mapper;
 
     public ProjectInfoResponse saveProject(ProjectInfoRequest newProject) {
-        ApplicationUser principal = (ApplicationUser)
-                SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.findUserByEmail(principal.getUsername());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByEmail(auth.getName());
         Project project = mapper.importProject(newProject);
         project.setParent(user);
         project = projectRepository.save(project);
