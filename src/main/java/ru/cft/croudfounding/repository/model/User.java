@@ -1,7 +1,6 @@
 package ru.cft.croudfounding.repository.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +18,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private long id;
 
     @Column(name = "name")
@@ -32,7 +30,6 @@ public class User {
 
     @Column(name = "password")
     @NotNull
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)

@@ -30,7 +30,6 @@ public class ProjectController {
     private final DonationService donationService;
     private final UserService userService;
 
-
     @PostMapping("/new")
     public ProjectInfoResponse addProject(@RequestBody @Valid ProjectInfoRequest newProject) {
         return projectService.saveProject(newProject);

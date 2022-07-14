@@ -1,29 +1,33 @@
 package ru.cft.croudfounding.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import ru.cft.croudfounding.payload.request.LoginRequest;
+import ru.cft.croudfounding.payload.request.SignupRequest;
+import ru.cft.croudfounding.payload.response.UserInfoResponse;
+import ru.cft.croudfounding.repository.mapper.CrowdfundingMapper;
 import ru.cft.croudfounding.repository.model.User;
 import ru.cft.croudfounding.service.UserService;
 
 @RestController
+@AllArgsConstructor
 public class AuthController {
 
     private final UserService userService;
-
-    public AuthController(UserService userService) {
-        this.userService = userService;
-    }
+    private final CrowdfundingMapper mapper;
 
     @PostMapping("/register")
-    public User register(@RequestBody User newUser) {
+    public UserInfoResponse register(@RequestBody SignupRequest signupRequest) {
+        User newUser = mapper.importUser(signupRequest);
         userService.register(newUser);
-        return newUser;
+        return mapper.exportUser(newUser);
     }
 
     @PostMapping("/login")
-    public User login(@RequestBody User user) {
-        return userService.findUserByEmail(user.getEmail());
+    public UserInfoResponse login(@RequestBody LoginRequest loginRequest) {
+        User authUser = userService.findUserByEmail(loginRequest.getEmail());
+        return mapper.exportUser(authUser);
     }
-
 }

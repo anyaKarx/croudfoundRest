@@ -50,5 +50,5 @@ public class ProjectInfoRequest {
     @NotNull
     private String description;
 
-    //TODO: картинки?дополнительные атрибуты
+    // TODO: картинки?дополнительные атрибуты
 }
