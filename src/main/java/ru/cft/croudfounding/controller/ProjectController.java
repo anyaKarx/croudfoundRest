@@ -1,9 +1,5 @@
 package ru.cft.croudfounding.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -13,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import ru.cft.croudfounding.model.DonateRequest;
-import ru.cft.croudfounding.model.ErrorDTO;
-import ru.cft.croudfounding.model.ProjectUnitDTO;
+import ru.cft.croudfounding.payload.request.DonateRequest;
+import ru.cft.croudfounding.payload.request.ProjectInfoRequest;
+import ru.cft.croudfounding.payload.response.ProjectInfoResponse;
 import ru.cft.croudfounding.repository.model.Project;
 import ru.cft.croudfounding.repository.model.User;
 import ru.cft.croudfounding.service.DonationService;
@@ -34,20 +30,9 @@ public class ProjectController {
     private final DonationService donationService;
     private final UserService userService;
 
-    @Operation(summary = "Создать проект.",
-            responses = {
-                    @ApiResponse(responseCode = "200",
-                            description = "Проект успешно создано.",
-                            content = @Content(schema = @Schema(implementation = ProjectUnitDTO.class))),
-                    @ApiResponse(responseCode = "400",
-                            description = "Невалидная схема документа или входные данные не верны.",
-                            content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
-                    @ApiResponse(responseCode = "404",
-                            description = "Такой пользователь не найден.",
-                            content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
-            })
+
     @PostMapping("/new")
-    public ProjectUnitDTO addProject(@RequestBody @Valid ProjectUnitDTO newProject) {
+    public ProjectInfoResponse addProject(@RequestBody @Valid ProjectInfoRequest newProject) {
         return projectService.saveProject(newProject);
     }
 
@@ -58,8 +43,8 @@ public class ProjectController {
     }
 
     @GetMapping("/{projectName}")
-    public Project getProjectByName(@PathVariable String projectName) {
-        return projectService.getProjectByName(projectName);
+    public ProjectInfoResponse getProjectByName(@PathVariable String projectName) {
+        return projectService.getProjectResponseByName(projectName);
     }
 
     @PostMapping("/{projectName}/donate")
@@ -67,9 +52,9 @@ public class ProjectController {
                                           @RequestBody DonateRequest donateRequest,
                                           @AuthenticationPrincipal UserDetails userDetails) {
         projectService.donateToProject(projectName, donateRequest);
-        User donator = userService.findUserByEmail(userDetails.getUsername());
-        Project project = getProjectByName(projectName);
-        donationService.saveDonation(donator, project, donateRequest);
+        User donater = userService.findUserByEmail(userDetails.getUsername());
+        Project project = projectService.getProjectByName(projectName);
+        donationService.saveDonation(donater, project, donateRequest);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

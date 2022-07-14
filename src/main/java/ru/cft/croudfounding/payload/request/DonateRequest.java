@@ -1,4 +1,4 @@
-package ru.cft.croudfounding.model;
+package ru.cft.croudfounding.payload.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

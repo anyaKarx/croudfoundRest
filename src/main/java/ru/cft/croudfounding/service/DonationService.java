@@ -2,7 +2,7 @@ package ru.cft.croudfounding.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.cft.croudfounding.model.DonateRequest;
+import ru.cft.croudfounding.payload.request.DonateRequest;
 import ru.cft.croudfounding.repository.DonationRepository;
 import ru.cft.croudfounding.repository.model.Donation;
 import ru.cft.croudfounding.repository.model.Project;
@@ -16,8 +16,8 @@ public class DonationService {
 
     public void saveDonation(User user, Project project, DonateRequest donateRequest) {
         Donation donation = new Donation();
-        donation.setIdUser(user);
-        donation.setIdProject(project);
+        donation.setUser(user);
+        donation.setProject(project);
         donation.setAmount(donateRequest.getDonationAmount());
         donationRepository.save(donation);
     }

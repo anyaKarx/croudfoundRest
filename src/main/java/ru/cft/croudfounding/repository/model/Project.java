@@ -3,10 +3,12 @@ package ru.cft.croudfounding.repository.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,17 +20,19 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
+    @NotNull
     private String name;
 
-    @Column(name = "start_date", nullable = false)
+    @Column(name = "start_date")
+    @NotNull
     @JsonFormat(pattern = "yyyy-MM-ddTHH:mm:ss.ZZZ")
     private LocalDateTime date;
 
-    @Column(name = "end_date", nullable = false)
+    @Column(name = "end_date")
+    @NotNull
     @JsonFormat(pattern = "yyyy-MM-ddTHH:mm:ss.ZZZ")
     private LocalDateTime endDate;
 
@@ -37,13 +41,15 @@ public class Project {
     @JsonBackReference
     private User parent;
 
-    @Column(name = "cash_amount", nullable = false)
-    private Long cashAmount;
+    @Column(name = "required_amount")
+    @NotNull
+    private Long requiredAmount;
 
-    @Column(name = "cash_donated", nullable = false)
-    private Long cashDonated;
+    @Column(name = "collected_amount")
+    @NotNull
+    private Long collectedAmount;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
+    @NotNull
     private String description;
-
 }

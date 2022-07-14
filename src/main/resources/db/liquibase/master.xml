@@ -35,10 +35,10 @@
             <column name="end_date" type="datetime">
                 <constraints nullable="false"/>
             </column>
-            <column name="cash_amount" type="numeric">
+            <column name="required_amount" type="numeric">
                 <constraints nullable="false"/>
             </column>
-            <column name="cash_donated" type="numeric">
+            <column name="collected_amount" type="numeric">
                 <constraints nullable="true"/>
             </column>
             <column name="parent_id" type="bigint">
