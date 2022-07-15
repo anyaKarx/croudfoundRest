@@ -22,7 +22,7 @@ import javax.crypto.SecretKey;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
     private final ApplicationUserService applicationUserService;
@@ -31,11 +31,11 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     private final SecretKey secretKey;
 
     @Autowired
-    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder,
-                                     ApplicationUserService applicationUserService,
-                                     RestAuthenticationEntryPoint restAuthenticationEntryPoint,
-                                     JwtConfig jwtConfig,
-                                     SecretKey secretKey) {
+    public SecurityConfig(PasswordEncoder passwordEncoder,
+                          ApplicationUserService applicationUserService,
+                          RestAuthenticationEntryPoint restAuthenticationEntryPoint,
+                          JwtConfig jwtConfig,
+                          SecretKey secretKey) {
         this.passwordEncoder = passwordEncoder;
         this.applicationUserService = applicationUserService;
         this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;

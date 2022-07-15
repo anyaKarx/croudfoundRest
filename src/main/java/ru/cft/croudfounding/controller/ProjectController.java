@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,12 +30,12 @@ public class ProjectController {
     private final UserService userService;
 
     @PostMapping("/new")
-    public ProjectInfoResponse addProject(@RequestBody @Valid ProjectInfoRequest newProject) {
-        return projectService.saveProject(newProject);
+    public ProjectInfoResponse addProject(@RequestBody @Valid ProjectInfoRequest project) {
+        return projectService.createProject(project);
     }
 
     @GetMapping
-    public List<Project> getAllProjects(
+    public List<ProjectInfoResponse> getAllProjects(
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
         return projectService.findAll(pageable);
     }
@@ -47,13 +46,21 @@ public class ProjectController {
     }
 
     @PostMapping("/{projectName}/donate")
-    public ResponseEntity donateToProject(@PathVariable String projectName,
+    public ResponseEntity<?> donateToProject(@PathVariable String projectName,
                                           @RequestBody DonateRequest donateRequest,
                                           @AuthenticationPrincipal UserDetails userDetails) {
         projectService.donateToProject(projectName, donateRequest);
         User donater = userService.findUserByEmail(userDetails.getUsername());
         Project project = projectService.getProjectByName(projectName);
         donationService.saveDonation(donater, project, donateRequest);
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{projectName}/edit")
+    public ResponseEntity<?> editProject(@PathVariable String projectName,
+                                         @RequestBody DonateRequest donateRequest,
+                                         @AuthenticationPrincipal UserDetails userDetails) {
+        // TODO
+        return ResponseEntity.ok().build();
     }
 }

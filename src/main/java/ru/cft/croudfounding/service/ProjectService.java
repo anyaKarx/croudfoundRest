@@ -27,8 +27,9 @@ public class ProjectService {
     private final UserService userService;
     private final CrowdfundingMapper mapper;
 
-    public ProjectInfoResponse saveProject(ProjectInfoRequest newProject) {
+    public ProjectInfoResponse createProject(ProjectInfoRequest newProject) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
         User user = userService.findUserByEmail(auth.getName());
         Project project = mapper.importProject(newProject);
         project.setParent(user);
@@ -36,8 +37,15 @@ public class ProjectService {
         return mapper.exportProject(project);
     }
 
-    public List<Project> findAll(Pageable pageable) {
-        return projectRepository.findAll(pageable).getContent();
+//    public ProjectInfoResponse updateProject(ProjectInfoRequest project) {
+//
+//    }
+
+    public List<ProjectInfoResponse> findAll(Pageable pageable) {
+        List<Project> projects = projectRepository.findAll(pageable).getContent();
+        return projects.stream()
+                .map(mapper::exportProject)
+                .collect(Collectors.toList());
     }
 
     public Project getProjectByName(String name) {
@@ -46,7 +54,7 @@ public class ProjectService {
     }
 
     public ProjectInfoResponse getProjectResponseByName(String name) {
-        var project = getProjectByName(name);
+        Project project = getProjectByName(name);
         return mapper.exportProject(project);
     }
 

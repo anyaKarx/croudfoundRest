@@ -48,7 +48,7 @@ public class UserService {
                         HttpStatus.BAD_REQUEST,
                         String.format("User with email \"%s\" not found", auth.getName())));
 
-        this.checkPasswordsForMatch(user.getPassword(), updateInfo.getPassword());
+        this.checkPasswordsForMismatch(user.getPassword(), updateInfo.getPassword());
 
         user.setName(updateInfo.getName());
         user.setPassword(updateInfo.getPassword());
@@ -58,7 +58,7 @@ public class UserService {
         return mapper.exportUser(user);
     }
 
-    private void checkPasswordsForMatch(String oldPassword, String newPassword) {
+    private void checkPasswordsForMismatch(String oldPassword, String newPassword) {
         if (encoder.matches(newPassword, oldPassword)) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
