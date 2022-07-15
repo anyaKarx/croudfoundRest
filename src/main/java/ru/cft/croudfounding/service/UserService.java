@@ -48,7 +48,7 @@ public class UserService {
                         HttpStatus.BAD_REQUEST,
                         String.format("User with email \"%s\" not found", auth.getName())));
 
-        this.checkPasswordsForMismatch(user.getPassword(), updateInfo.getPassword());
+        //this.checkPasswordsForMismatch(user.getPassword(), updateInfo.getPassword());
 
         user.setName(updateInfo.getName());
         user.setPassword(updateInfo.getPassword());
@@ -58,14 +58,14 @@ public class UserService {
         return mapper.exportUser(user);
     }
 
-    private void checkPasswordsForMismatch(String oldPassword, String newPassword) {
-        if (encoder.matches(newPassword, oldPassword)) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "New and old passwords must be different"
-            );
-        }
-    }
+//    private void checkPasswordsForMismatch(String oldPassword, String newPassword) {
+//        if (encoder.matches(newPassword, oldPassword)) {
+//            throw new ResponseStatusException(
+//                    HttpStatus.BAD_REQUEST,
+//                    "New and old passwords must be different"
+//            );
+//        }
+//    }
 
     public User findUserByEmail(String email) {
         return userRepository.findUserByEmailIgnoreCase(email).orElseThrow(() ->
@@ -83,6 +83,11 @@ public class UserService {
 
     public UserInfoResponse findUserDTOById(Long id) {
         User user = this.findUserById(id);
+        return mapper.exportUser(user);
+    }
+
+    public UserInfoResponse findUserDTOByEmail(String email) {
+        User user = this.findUserByEmail(email);
         return mapper.exportUser(user);
     }
 }
