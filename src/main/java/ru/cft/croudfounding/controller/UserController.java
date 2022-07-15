@@ -26,8 +26,8 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public UserInfoResponse getUserInfoAfterAuth(@AuthenticationPrincipal UserDetails details) {
-        return userService.findUserDTOByEmail(details.getUsername());
+    public UserInfoResponse getUserInfoAfterAuth() {
+        return userService.findUserDTOAfterAuth();
     }
 
     @PutMapping("/profile/edit")
