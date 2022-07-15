@@ -63,9 +63,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(restAuthenticationEntryPoint)
                 .and()
                 .authorizeRequests()
-                .mvcMatchers(HttpMethod.POST, "/projects/new").authenticated()
-                .mvcMatchers(HttpMethod.POST, "/projects/*/donate").authenticated()
-                .mvcMatchers(HttpMethod.PUT, "/users/*/edit").authenticated()
+                .mvcMatchers(
+                        HttpMethod.POST,
+                        "/projects/new",
+                        "/projects/*/donate",
+                        "/projects/*/edit").authenticated()
+                .mvcMatchers(HttpMethod.PUT, "/users/profile/edit").authenticated()
                 .anyRequest().permitAll();
     }
 

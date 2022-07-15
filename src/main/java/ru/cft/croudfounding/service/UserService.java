@@ -83,7 +83,7 @@ public class UserService {
 
     public UserInfoResponse findUserDTOByAuth() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = findUserByEmail(auth.getName());
+        User user = this.findUserByEmail(auth.getName());
         return mapper.exportUser(user);
     }
 }
