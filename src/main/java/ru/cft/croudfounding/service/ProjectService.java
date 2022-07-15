@@ -7,8 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import ru.cft.croudfounding.payload.request.DonateRequest;
 import ru.cft.croudfounding.payload.request.ProjectInfoRequest;
+import ru.cft.croudfounding.payload.request.UpdateProjectInfoRequest;
 import ru.cft.croudfounding.payload.response.ProjectInfoResponse;
 import ru.cft.croudfounding.payload.response.ProjectsUnitPreviewResponse;
 import ru.cft.croudfounding.repository.ProjectRepository;
@@ -33,13 +33,12 @@ public class ProjectService {
         User user = userService.findUserByEmail(auth.getName());
         Project project = mapper.importProject(newProject);
         project.setParent(user);
+        project.setCollectedAmount(0L);
         project = projectRepository.save(project);
-        return mapper.exportProject(project);
+        ProjectInfoResponse projectInfoResponse = mapper.exportProject(project);
+        projectInfoResponse.setParentName(user.getName());
+        return projectInfoResponse;
     }
-
-//    public ProjectInfoResponse updateProject(ProjectInfoRequest project) {
-//
-//    }
 
     public List<ProjectInfoResponse> findAll(Pageable pageable) {
         List<Project> projects = projectRepository.findAll(pageable).getContent();
@@ -48,13 +47,15 @@ public class ProjectService {
                 .collect(Collectors.toList());
     }
 
-    public Project getProjectByName(String name) {
-        return projectRepository.findByName(name).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
+    public Project getProjectById(Long id) {
+        return projectRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Project with id=%d not found", id)));
     }
 
-    public ProjectInfoResponse getProjectResponseByName(String name) {
-        Project project = getProjectByName(name);
+    public ProjectInfoResponse getProjectResponseById(Long id ) {
+        Project project = getProjectById(id);
         return mapper.exportProject(project);
     }
 
@@ -67,9 +68,28 @@ public class ProjectService {
         return new ProjectsUnitPreviewResponse(projectDTO);
     }
 
-    public void donateToProject(String projectName, DonateRequest donateRequest) {
-        Project project = getProjectByName(projectName);
-        project.setCollectedAmount(project.getCollectedAmount() + donateRequest.getDonationAmount());
+    public void donateToProject(Long id, Long donateAmount) {
+        Project project = getProjectById(id);
+        project.setCollectedAmount(project.getCollectedAmount() + donateAmount);
         projectRepository.save(project);
+    }
+
+    public ProjectInfoResponse updateProjectByName(Long id, UpdateProjectInfoRequest updatedProject) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        Project project = this.getProjectById(id);
+
+        if (!project.getParent().getEmail().equals(auth.getName())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "No rights to modify this project");
+        }
+
+        project.setEndDate(updatedProject.getEndDate());
+        project.setRequiredAmount(updatedProject.getRequiredAmount());
+        project.setDescription(updatedProject.getDescription());
+        project = projectRepository.save(project);
+
+        return mapper.exportProject(project);
     }
 }

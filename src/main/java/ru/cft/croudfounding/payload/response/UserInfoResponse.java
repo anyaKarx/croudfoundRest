@@ -13,6 +13,9 @@ public class UserInfoResponse {
     @JsonProperty("id")
     private Long id;
 
+    @JsonProperty("name")
+    private String name;
+
     @JsonProperty("email")
     private String email;
 }

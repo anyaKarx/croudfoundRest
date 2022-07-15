@@ -18,9 +18,9 @@ public class UserController {
     private final UserService userService;
     private final ProjectService projectService;
 
-    @GetMapping("/profile/info")
-    public UserInfoResponse get() {
-        return userService.findUserDTOByAuth();
+    @GetMapping("/{userId}")
+    public UserInfoResponse get(@PathVariable Long userId) {
+        return userService.findUserDTOById(userId);
     }
 
     @PutMapping("/profile/edit")

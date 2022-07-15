@@ -81,9 +81,8 @@ public class UserService {
                         String.format("User with id=%d not found", id)));
     }
 
-    public UserInfoResponse findUserDTOByAuth() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = this.findUserByEmail(auth.getName());
+    public UserInfoResponse findUserDTOById(Long id) {
+        User user = this.findUserById(id);
         return mapper.exportUser(user);
     }
 }
