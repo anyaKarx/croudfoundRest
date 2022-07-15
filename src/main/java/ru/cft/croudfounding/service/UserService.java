@@ -2,9 +2,11 @@ package ru.cft.croudfounding.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import ru.cft.croudfounding.payload.request.SignupRequest;
 import ru.cft.croudfounding.payload.response.UserInfoResponse;
@@ -12,7 +14,6 @@ import ru.cft.croudfounding.repository.UserRepository;
 import ru.cft.croudfounding.repository.mapper.CrowdfundingMapper;
 import ru.cft.croudfounding.repository.model.User;
 
-import javax.validation.Valid;
 import java.util.Locale;
 
 @Service
@@ -23,13 +24,47 @@ public class UserService {
     private final CrowdfundingMapper mapper;
     private final PasswordEncoder encoder;
 
-    public UserInfoResponse updateUserInfo(@Valid SignupRequest updateInfo) {
-        User tmp = userRepository.findUserByEmailIgnoreCase(updateInfo.getEmail()).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        String.format("User with email \"%s\" not found", updateInfo.getEmail())));
-        var newUser = mapper.importUser(updateInfo);
-        newUser.setId(tmp.getId());
-        return mapper.exportUser(userRepository.save(newUser));
+    public UserInfoResponse registerUser(User user) {
+        if (userRepository.existsByEmailIgnoreCase(user.getEmail())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Email already taken");
+        }
+        user = this.saveUser(user);
+        return mapper.exportUser(user);
+    }
+
+    private User saveUser(User user) {
+        user.setEmail(user.getEmail().toLowerCase(Locale.ENGLISH));
+        user.setPassword(encoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+
+    @Transactional
+    public UserInfoResponse updateUserInfo(SignupRequest updateInfo) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        User user = userRepository.findUserByEmailIgnoreCase(auth.getName())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        String.format("User with email \"%s\" not found", auth.getName())));
+
+        this.checkPasswordsForMatch(user.getPassword(), updateInfo.getPassword());
+
+        user.setName(updateInfo.getName());
+        user.setPassword(updateInfo.getPassword());
+
+        user = this.saveUser(user);
+
+        return mapper.exportUser(user);
+    }
+
+    private void checkPasswordsForMatch(String oldPassword, String newPassword) {
+        if (encoder.matches(newPassword, oldPassword)) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "New and old passwords must be different"
+            );
+        }
     }
 
     public User findUserByEmail(String email) {
@@ -41,23 +76,14 @@ public class UserService {
 
     public User findUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        "User not found"));
-    }
-
-    public void register(User user) {
-        if (userRepository.existsByEmailIgnoreCase(user.getEmail())) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Email already taken");
-        }
-        user.setEmail(user.getEmail().toLowerCase(Locale.ENGLISH));
-        user.setPassword(encoder.encode(user.getPassword()));
-        userRepository.save(user);
+                new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        String.format("User with id=%d not found", id)));
     }
 
     public UserInfoResponse findUserDTOByAuth() {
-        var authUser = SecurityContextHolder.getContext().getAuthentication();
-        User user = findUserByEmail(authUser.getName());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = findUserByEmail(auth.getName());
         return mapper.exportUser(user);
     }
 }

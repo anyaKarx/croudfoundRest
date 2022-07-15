@@ -21,8 +21,7 @@ public class AuthController {
     @PostMapping("/register")
     public UserInfoResponse register(@RequestBody SignupRequest signupRequest) {
         User newUser = mapper.importUser(signupRequest);
-        userService.register(newUser);
-        return mapper.exportUser(newUser);
+        return userService.registerUser(newUser);
     }
 
     @PostMapping("/login")
