@@ -16,13 +16,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class UpdateProjectInfoRequest {
 
-    @JsonProperty("start_date")
-    @Parameter(description = "Дата начала сбора")
-    @NotNull
-    @Valid
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private LocalDateTime startDate;
-
     @JsonProperty("end_date")
     @Parameter(description = "Дата окончания сбора")
     @NotNull
@@ -35,11 +28,9 @@ public class UpdateProjectInfoRequest {
     @NotNull
     private Long requiredAmount;
 
-
     @JsonProperty("description")
     @Parameter(description = "Описание проекта")
     @NotNull
     private String description;
 
-    // TODO: картинки?дополнительные атрибуты
 }

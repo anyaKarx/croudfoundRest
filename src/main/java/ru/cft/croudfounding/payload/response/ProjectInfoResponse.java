@@ -65,5 +65,4 @@ public class ProjectInfoResponse {
     @NotNull
     private String description;
 
-    //TODO: картинки?дополнительные атрибуты
 }

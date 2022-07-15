@@ -19,6 +19,7 @@ public interface CrowdfundingMapper {
     User importUser(SignupRequest signupRequest);
 
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
     @Mapping(target = "email", source = "email")
     UserInfoResponse exportUser(User user);
 
@@ -32,6 +33,7 @@ public interface CrowdfundingMapper {
     @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
     @Mapping(target = "parentId", expression = "java(project.getParent().getId())")
+    @Mapping(target = "parentName", expression = "java(project.getParent().getName())")
     @Mapping(target = "date", source = "date")
     ProjectInfoResponse exportProject(Project project);
 

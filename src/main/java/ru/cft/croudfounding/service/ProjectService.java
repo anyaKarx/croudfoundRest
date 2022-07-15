@@ -40,10 +40,6 @@ public class ProjectService {
         return projectInfoResponse;
     }
 
-//    public ProjectInfoResponse updateProject(ProjectInfoRequest project) {
-//
-//    }
-
     public List<ProjectInfoResponse> findAll(Pageable pageable) {
         List<Project> projects = projectRepository.findAll(pageable).getContent();
         return projects.stream()
@@ -53,7 +49,9 @@ public class ProjectService {
 
     public Project getProjectById(Long id) {
         return projectRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
+                new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        String.format("Project with id=%d not found", id)));
     }
 
     public ProjectInfoResponse getProjectResponseById(Long id ) {
@@ -76,21 +74,22 @@ public class ProjectService {
         projectRepository.save(project);
     }
 
-    public ProjectInfoResponse updateProjectByName(Long id, UpdateProjectInfoRequest updateProjectInfoRequest) {
+    public ProjectInfoResponse updateProjectByName(Long id, UpdateProjectInfoRequest updatedProject) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByEmail(auth.getName());
-        Project project = projectRepository.findById(id).orElseThrow(
-                ()-> {throw new RuntimeException();
-                });
-        if (!project.getParent().getEmail().equals(user.getEmail()))
-            throw new RuntimeException("нарушение прав доступа");
-        project.setDescription(updateProjectInfoRequest.getDescription());
-        project.setDate(updateProjectInfoRequest.getStartDate());
-        project.setEndDate(updateProjectInfoRequest.getEndDate());
-        project.setRequiredAmount(updateProjectInfoRequest.getRequiredAmount());
+
+        Project project = this.getProjectById(id);
+
+        if (!project.getParent().getEmail().equals(auth.getName())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "No rights to modify this project");
+        }
+
+        project.setEndDate(updatedProject.getEndDate());
+        project.setRequiredAmount(updatedProject.getRequiredAmount());
+        project.setDescription(updatedProject.getDescription());
         project = projectRepository.save(project);
-        var projectInfo =  mapper.exportProject(project);
-        projectInfo.setParentName(user.getName());
-        return projectInfo;
+
+        return mapper.exportProject(project);
     }
 }

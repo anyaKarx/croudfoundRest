@@ -40,25 +40,25 @@ public class ProjectController {
         return projectService.findAll(pageable);
     }
 
-    @GetMapping("/")
-    public ProjectInfoResponse getProjectById(@RequestParam(name = "id") Long id) {
-        return projectService.getProjectResponseById(id);
+    @GetMapping("/{projectId}")
+    public ProjectInfoResponse getProjectById(@PathVariable Long projectId) {
+        return projectService.getProjectResponseById(projectId);
     }
 
-    @PostMapping("/donate")
-    public ResponseEntity<?> donateToProject(@RequestParam(name = "id") Long id,
+    @PostMapping("/{projectId}/donate")
+    public ResponseEntity<?> donateToProject(@PathVariable Long projectId,
                                              @RequestBody Long donateAmount) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User donater = userService.findUserByEmail(auth.getName());
-        projectService.donateToProject(id, donateAmount);
-        Project project = projectService.getProjectById(id);
+        projectService.donateToProject(projectId, donateAmount);
+        Project project = projectService.getProjectById(projectId);
         donationService.saveDonation(donater, project, donateAmount);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/edit")
-    public ResponseEntity<ProjectInfoResponse> editProject(@RequestParam(name = "id") Long id,
-                                                           @RequestBody UpdateProjectInfoRequest updateProjectInfoRequest) {
-        return ResponseEntity.ok(projectService.updateProjectByName(id, updateProjectInfoRequest));
+    @PostMapping("/{projectId}/edit")
+    public ResponseEntity<ProjectInfoResponse> editProject(@PathVariable Long projectId,
+                                                           @RequestBody UpdateProjectInfoRequest updatedProject) {
+        return ResponseEntity.ok(projectService.updateProjectByName(projectId, updatedProject));
     }
 }

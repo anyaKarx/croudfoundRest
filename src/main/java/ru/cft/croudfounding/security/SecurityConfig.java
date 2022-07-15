@@ -65,7 +65,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .mvcMatchers(HttpMethod.POST, "/projects/new").authenticated()
                 .mvcMatchers(HttpMethod.POST, "/projects/*/donate").authenticated()
-                .mvcMatchers(HttpMethod.PUT, "/users/*/edit").authenticated()
+                .mvcMatchers(HttpMethod.POST, "/projects/*/edit").authenticated()
+                .mvcMatchers(HttpMethod.PUT, "/users/profile/edit").authenticated()
                 .anyRequest().permitAll();
     }
 
