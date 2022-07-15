@@ -1,6 +1,8 @@
 package ru.cft.croudfounding.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import ru.cft.croudfounding.payload.request.SignupRequest;
 import ru.cft.croudfounding.payload.response.ProjectsUnitPreviewResponse;
@@ -19,8 +21,13 @@ public class UserController {
     private final ProjectService projectService;
 
     @GetMapping("/{userId}")
-    public UserInfoResponse get(@PathVariable Long userId) {
+    public UserInfoResponse getUserInfo(@PathVariable Long userId) {
         return userService.findUserDTOById(userId);
+    }
+
+    @GetMapping("/profile")
+    public UserInfoResponse getUserInfoAfterAuth(@AuthenticationPrincipal UserDetails details) {
+        return userService.findUserDTOByEmail(details.getUsername());
     }
 
     @PutMapping("/profile/edit")

@@ -85,4 +85,9 @@ public class UserService {
         User user = this.findUserById(id);
         return mapper.exportUser(user);
     }
+
+    public UserInfoResponse findUserDTOByEmail(String email) {
+        User user = this.findUserByEmail(email);
+        return mapper.exportUser(user);
+    }
 }
