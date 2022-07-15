@@ -13,6 +13,7 @@
 		<springfox-version>3.0.0</springfox-version>
 		<jsonwebtoken.version>0.11.5</jsonwebtoken.version>
 	</properties>
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>

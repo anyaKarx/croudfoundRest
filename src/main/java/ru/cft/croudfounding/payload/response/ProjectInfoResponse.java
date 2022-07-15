@@ -31,7 +31,7 @@ public class ProjectInfoResponse {
     @NotNull
     @Valid
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private LocalDateTime startDate;
+    private LocalDateTime date;
 
     @JsonProperty("end_date")
     @Parameter(description = "Дата окончания сбора")

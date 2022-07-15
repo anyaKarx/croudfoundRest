@@ -24,11 +24,15 @@ public interface CrowdfundingMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "name", source = "name")
+    @Mapping(target = "date", source = "date")
+    @Mapping(target = "collectedAmount", ignore = true)
     @Mapping(target = "parent", ignore = true)
     Project importProject(ProjectInfoRequest projectInfoResponse);
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
+    @Mapping(target = "parentId", expression = "java(project.getParent().getId())")
+    @Mapping(target = "date", source = "date")
     ProjectInfoResponse exportProject(Project project);
 
     @Mapping(target = "id", source = "id")

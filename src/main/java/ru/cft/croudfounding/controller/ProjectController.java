@@ -5,11 +5,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import ru.cft.croudfounding.payload.request.DonateRequest;
 import ru.cft.croudfounding.payload.request.ProjectInfoRequest;
+import ru.cft.croudfounding.payload.request.UpdateProjectInfoRequest;
 import ru.cft.croudfounding.payload.response.ProjectInfoResponse;
 import ru.cft.croudfounding.repository.model.Project;
 import ru.cft.croudfounding.repository.model.User;
@@ -40,27 +40,25 @@ public class ProjectController {
         return projectService.findAll(pageable);
     }
 
-    @GetMapping("/{projectName}")
-    public ProjectInfoResponse getProjectByName(@PathVariable String projectName) {
-        return projectService.getProjectResponseByName(projectName);
+    @GetMapping("/")
+    public ProjectInfoResponse getProjectById(@RequestParam(name = "id") Long id) {
+        return projectService.getProjectResponseById(id);
     }
 
-    @PostMapping("/{projectName}/donate")
-    public ResponseEntity<?> donateToProject(@PathVariable String projectName,
-                                          @RequestBody DonateRequest donateRequest,
-                                          @AuthenticationPrincipal UserDetails userDetails) {
-        projectService.donateToProject(projectName, donateRequest);
-        User donater = userService.findUserByEmail(userDetails.getUsername());
-        Project project = projectService.getProjectByName(projectName);
-        donationService.saveDonation(donater, project, donateRequest);
+    @PostMapping("/donate")
+    public ResponseEntity<?> donateToProject(@RequestParam(name = "id") Long id,
+                                             @RequestBody Long donateAmount) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User donater = userService.findUserByEmail(auth.getName());
+        projectService.donateToProject(id, donateAmount);
+        Project project = projectService.getProjectById(id);
+        donationService.saveDonation(donater, project, donateAmount);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{projectName}/edit")
-    public ResponseEntity<?> editProject(@PathVariable String projectName,
-                                         @RequestBody DonateRequest donateRequest,
-                                         @AuthenticationPrincipal UserDetails userDetails) {
-        // TODO
-        return ResponseEntity.ok().build();
+    @PostMapping("/edit")
+    public ResponseEntity<ProjectInfoResponse> editProject(@RequestParam(name = "id") Long id,
+                                                           @RequestBody UpdateProjectInfoRequest updateProjectInfoRequest) {
+        return ResponseEntity.ok(projectService.updateProjectByName(id, updateProjectInfoRequest));
     }
 }

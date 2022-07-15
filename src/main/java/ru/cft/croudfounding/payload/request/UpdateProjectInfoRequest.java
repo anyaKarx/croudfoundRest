@@ -14,20 +14,14 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ProjectInfoRequest {
-
-
-    @JsonProperty("name")
-    @Parameter(description = "Название проекта")
-    @NotNull
-    private String name;
+public class UpdateProjectInfoRequest {
 
     @JsonProperty("start_date")
     @Parameter(description = "Дата начала сбора")
     @NotNull
     @Valid
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private LocalDateTime date;
+    private LocalDateTime startDate;
 
     @JsonProperty("end_date")
     @Parameter(description = "Дата окончания сбора")
